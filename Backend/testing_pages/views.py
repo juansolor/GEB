@@ -19,3 +19,8 @@ def test_login(request):
 def test_api(request):
     """Página para probar endpoints de la API"""
     return render(request, 'testing_pages/test_api.html')
+
+
+def test_pricing(request):
+    """Página para probar el análisis de precios unitarios"""
+    return render(request, 'testing_pages/test_pricing.html')
