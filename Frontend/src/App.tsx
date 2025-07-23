@@ -11,6 +11,9 @@ import Sales from './pages/Sales';
 import Finances from './pages/Finances';
 import Reports from './pages/Reports';
 import Users from './pages/Users';
+import PricingAnalysis from './pages/PricingAnalysis';
+import PricingAnalysisDetail from './pages/PricingAnalysisDetail';
+import Resources from './pages/Resources';
 import Layout from './components/Layout';
 import './App.css';
 
@@ -89,6 +92,36 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Users />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pricing-analysis"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <PricingAnalysis />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pricing-analysis/:id"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <PricingAnalysisDetail />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/resources"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Resources />
                   </Layout>
                 </ProtectedRoute>
               }

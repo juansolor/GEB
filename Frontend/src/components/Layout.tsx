@@ -23,6 +23,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Clientes', path: '/customers', icon: '👥' },
     { name: 'Ventas', path: '/sales', icon: '💰' },
     { name: 'Finanzas', path: '/finances', icon: '💳' },
+    { name: 'Recursos', path: '/resources', icon: '🧱' },
+    { name: 'Análisis de Precios', path: '/pricing-analysis', icon: '📋' },
     { name: 'Reportes', path: '/reports', icon: '📈' },
     ...(user?.role === 'admin' ? [{ name: 'Usuarios', path: '/users', icon: '⚙️' }] : []),
   ];
@@ -76,7 +78,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </span>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+                className="bg-red-600 hover:bg-red-700 text-black px-4 py-2 rounded-lg transition-colors"
               >
                 Cerrar Sesión
               </button>

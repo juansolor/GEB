@@ -2,21 +2,40 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q, F
+import logging
 from .models import Product, Category
 from .serializers import (
     ProductSerializer, ProductCreateUpdateSerializer, ProductListSerializer,
     CategorySerializer
 )
 
+logger = logging.getLogger(__name__)
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('name')
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    def create(self, request, *args, **kwargs):
+        logger.info(f"Creating category with data: {request.data}")
+        logger.info(f"Request user: {request.user}")
+        logger.info(f"Request headers: {dict(request.headers)}")
+        
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            logger.info(f"Category data is valid: {serializer.validated_data}")
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            logger.info(f"Category created successfully: {serializer.data}")
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            logger.error(f"Category creation failed. Errors: {serializer.errors}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().order_by('-created_at', 'name')
     permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
@@ -25,6 +44,22 @@ class ProductViewSet(viewsets.ModelViewSet):
         elif self.action in ['create', 'update', 'partial_update']:
             return ProductCreateUpdateSerializer
         return ProductSerializer
+    
+    def create(self, request, *args, **kwargs):
+        logger.info(f"Creating product with data: {request.data}")
+        logger.info(f"Request user: {request.user}")
+        logger.info(f"Content-Type: {request.content_type}")
+        
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            logger.info(f"Product data is valid: {serializer.validated_data}")
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            logger.info(f"Product created successfully: {serializer.data}")
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        else:
+            logger.error(f"Product creation failed. Errors: {serializer.errors}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def get_queryset(self):
         queryset = Product.objects.all()
@@ -58,7 +93,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         if low_stock and low_stock.lower() == 'true':
             queryset = queryset.filter(stock_quantity__lte=F('min_stock_level'))
         
-        return queryset.order_by('-created_at')
+        return queryset.order_by('-created_at', 'name')
     
     @action(detail=False, methods=['get'])
     def low_stock(self, request):

@@ -87,7 +87,7 @@ const Dashboard: React.FC = () => {
         {statCards.map((stat, index) => (
           <div key={index} className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center">
-              <div className={`${stat.color} rounded-full p-3 text-white text-2xl`}>
+              <div className={`${stat.color} rounded-full p-3 text-black text-2xl`}>
                 {stat.icon}
               </div>
               <div className="ml-4">

@@ -7,6 +7,15 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ['id', 'name', 'description', 'created_at']
         read_only_fields = ['id', 'created_at']
+    
+    def validate_name(self, value):
+        if not value or not value.strip():
+            raise serializers.ValidationError("El nombre de la categoría es requerido")
+        return value.strip()
+    
+    def create(self, validated_data):
+        print(f"Creating category with data: {validated_data}")
+        return super().create(validated_data)
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -33,9 +42,10 @@ class ProductCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            'name', 'description', 'type', 'category', 'sku', 'price',
+            'id', 'name', 'description', 'type', 'category', 'sku', 'price',
             'cost', 'stock_quantity', 'min_stock_level', 'is_active', 'image'
         ]
+        read_only_fields = ['id']
 
     def validate_sku(self, value):
         if value:

@@ -8,7 +8,7 @@ class Category(models.Model):
     """
     Product/Service categories
     """
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -18,6 +18,7 @@ class Category(models.Model):
     class Meta:
         db_table = 'categories'
         verbose_name_plural = 'categories'
+        ordering = ['name']  # Order categories by name alphabetically
 
 
 class Product(models.Model):
@@ -59,3 +60,4 @@ class Product(models.Model):
     
     class Meta:
         db_table = 'products'
+        ordering = ['-created_at', 'name']  # Order by newest first, then by name

@@ -22,5 +22,10 @@ def test_api(request):
 
 
 def test_pricing(request):
+    """Página para probar endpoints de análisis de precios"""
+    return render(request, 'testing_pages/test_pricing.html')
+
+
+def test_pricing(request):
     """Página para probar el análisis de precios unitarios"""
     return render(request, 'testing_pages/test_pricing.html')

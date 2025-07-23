@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet
 from products.views import ProductViewSet, CategoryViewSet
+from customers.views import CustomerViewSet
 from pricing_analysis.views import (
     ServiceCategoryViewSet, ResourceTypeViewSet, ResourceViewSet,
     UnitPriceAnalysisViewSet, UnitPriceItemViewSet, 
@@ -16,6 +17,7 @@ router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'products', ProductViewSet)
 router.register(r'categories', CategoryViewSet)
+router.register(r'customers', CustomerViewSet)
 router.register(r'service-categories', ServiceCategoryViewSet)
 router.register(r'resource-types', ResourceTypeViewSet)
 router.register(r'resources', ResourceViewSet)
