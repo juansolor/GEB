@@ -6,6 +6,8 @@ from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet
 from products.views import ProductViewSet, CategoryViewSet
 from customers.views import CustomerViewSet
+from sales.views import SaleViewSet
+from finances.views import TransactionViewSet, ExpenseCategoryViewSet, BudgetViewSet
 from pricing_analysis.views import (
     ServiceCategoryViewSet, ResourceTypeViewSet, ResourceViewSet,
     UnitPriceAnalysisViewSet, UnitPriceItemViewSet, 
@@ -18,6 +20,10 @@ router.register(r'users', UserViewSet)
 router.register(r'products', ProductViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'customers', CustomerViewSet)
+router.register(r'sales', SaleViewSet)
+router.register(r'transactions', TransactionViewSet)
+router.register(r'expense-categories', ExpenseCategoryViewSet)
+router.register(r'budgets', BudgetViewSet)
 router.register(r'service-categories', ServiceCategoryViewSet)
 router.register(r'resource-types', ResourceTypeViewSet)
 router.register(r'resources', ResourceViewSet)

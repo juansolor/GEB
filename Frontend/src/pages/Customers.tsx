@@ -78,10 +78,10 @@ const Customers: React.FC = () => {
     // Search filter
     if (searchTerm) {
       filtered = filtered.filter(customer =>
-        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        customer.phone.includes(searchTerm) ||
-        customer.document_number.includes(searchTerm)
+        (customer.name && customer.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (customer.email && customer.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (customer.phone && customer.phone.includes(searchTerm)) ||
+        (customer.document_number && customer.document_number.includes(searchTerm))
       );
     }
 

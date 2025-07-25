@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface DashboardStats {
   totalSales: number;
@@ -10,6 +11,7 @@ interface DashboardStats {
 }
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats>({
     totalSales: 0,
     totalCustomers: 0,
@@ -143,13 +145,22 @@ const Dashboard: React.FC = () => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="card-title text-lg mb-4">Acciones Rápidas</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button className="btn-primary">
+          <button 
+            onClick={() => navigate('/sales')}
+            className="btn-primary"
+          >
             📝 Nueva Venta
           </button>
-          <button className="btn-secondary">
+          <button 
+            onClick={() => navigate('/customers')}
+            className="btn-secondary"
+          >
             👤 Agregar Cliente
           </button>
-          <button className="btn-secondary">
+          <button 
+            onClick={() => navigate('/products')}
+            className="btn-secondary"
+          >
             📦 Nuevo Producto
           </button>
         </div>

@@ -49,10 +49,15 @@ const PricingAnalysis: React.FC = () => {
         }),
         getServiceCategories()
       ]);
-      setAnalyses(analysesData);
-      setCategories(categoriesData);
+      console.log('Análisis cargados:', analysesData);
+      console.log('Categorías cargadas:', categoriesData);
+      
+      setAnalyses(Array.isArray(analysesData) ? analysesData : []);
+      setCategories(Array.isArray(categoriesData) ? categoriesData : []);
     } catch (error) {
       console.error('Error loading data:', error);
+      setAnalyses([]); // Ensure analyses is always an array
+      setCategories([]); // Ensure categories is always an array
       alert('Error al cargar los datos');
     } finally {
       setLoading(false);
@@ -61,6 +66,32 @@ const PricingAnalysis: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validación frontend básica
+    if (formData.category === 0) {
+      alert('Por favor selecciona una categoría válida');
+      return;
+    }
+    
+    // Si hay categorías cargadas, verificar que la seleccionada existe
+    if (categories.length > 0) {
+      const selectedCategory = categories.find(cat => cat.id === formData.category);
+      if (!selectedCategory) {
+        alert(`La categoría seleccionada (ID: ${formData.category}) no es válida. Por favor selecciona una de la lista.`);
+        return;
+      }
+    }
+    
+    if (!formData.name.trim()) {
+      alert('El nombre es requerido');
+      return;
+    }
+    
+    if (!formData.code.trim()) {
+      alert('El código es requerido');
+      return;
+    }
+    
     try {
       if (editingAnalysis) {
         const updated = await updateUnitPriceAnalysis(editingAnalysis.id, formData);
@@ -184,7 +215,13 @@ const PricingAnalysis: React.FC = () => {
       }}>
         <h2>💰 Análisis de Precios Unitarios</h2>
         <button 
-          onClick={() => setShowForm(true)}
+          onClick={() => {
+            console.log('Intentando abrir formulario. Categorías disponibles:', categories);
+            if (categories.length === 0) {
+              alert('No se han cargado las categorías de servicio. El formulario se abrirá, pero necesitarás recargar la página si las categorías no aparecen.');
+            }
+            setShowForm(true);
+          }}
           style={{
             backgroundColor: '#007bff',
             color: 'white',
@@ -211,14 +248,32 @@ const PricingAnalysis: React.FC = () => {
           <label>Categoría:</label>
           <select 
             value={filter.category} 
-            onChange={(e) => setFilter({...filter, category: e.target.value})}
-            style={{ marginLeft: '5px', padding: '5px' }}
+            onChange={(e) => {
+              console.log('Filter category changed to:', e.target.value);
+              console.log('Available categories:', categories);
+              setFilter({...filter, category: e.target.value});
+            }}
+            style={{ 
+              marginLeft: '5px', 
+              padding: '5px',
+              backgroundColor: categories.length === 0 ? '#fff3cd' : 'white'
+            }}
           >
             <option value="">Todas</option>
-            {categories.map(cat => (
+            {Array.isArray(categories) && categories.map(cat => (
               <option key={cat.id} value={cat.id}>{cat.name}</option>
             ))}
           </select>
+          {categories.length === 0 && (
+            <div style={{ fontSize: '11px', color: '#856404', marginTop: '2px' }}>
+              No hay categorías disponibles
+            </div>
+          )}
+          {categories.length > 0 && (
+            <div style={{ fontSize: '11px', color: '#155724', marginTop: '2px' }}>
+              {categories.length} categorías cargadas
+            </div>
+          )}
         </div>
         <div>
           <label>Estado:</label>
@@ -241,7 +296,7 @@ const PricingAnalysis: React.FC = () => {
         gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', 
         gap: '20px' 
       }}>
-        {analyses.map((analysis) => (
+        {Array.isArray(analyses) && analyses.map((analysis) => (
           <div 
             key={analysis.id} 
             style={{
@@ -382,6 +437,21 @@ const PricingAnalysis: React.FC = () => {
             </div>
           </div>
         ))}
+        
+        {Array.isArray(analyses) && analyses.length === 0 && !loading && (
+          <div style={{
+            gridColumn: '1 / -1',
+            textAlign: 'center',
+            padding: '40px',
+            color: '#666',
+            backgroundColor: '#f8f9fa',
+            borderRadius: '8px',
+            border: '1px solid #dee2e6'
+          }}>
+            <h4>No hay análisis de precios disponibles</h4>
+            <p>Haz clic en "➕ Nuevo Análisis" para crear tu primer análisis de precios unitarios.</p>
+          </div>
+        )}
       </div>
 
       {/* Formulario Modal */}
@@ -407,6 +477,32 @@ const PricingAnalysis: React.FC = () => {
             overflowY: 'auto'
           }}>
             <h3>{editingAnalysis ? 'Editar Análisis' : 'Nuevo Análisis'}</h3>
+            
+            {categories.length === 0 && (
+              <div style={{
+                backgroundColor: '#fff3cd',
+                color: '#856404',
+                padding: '10px',
+                borderRadius: '4px',
+                marginBottom: '15px',
+                border: '1px solid #ffeaa7'
+              }}>
+                ⚠️ No se han cargado las categorías de servicio. Verifique la conexión con el servidor.
+              </div>
+            )}
+            
+            {categories.length > 0 && (
+              <div style={{
+                backgroundColor: '#d4edda',
+                color: '#155724',
+                padding: '8px',
+                borderRadius: '4px',
+                marginBottom: '15px',
+                fontSize: '12px'
+              }}>
+                ✅ {categories.length} categorías disponibles: {categories.map(cat => cat.name).join(', ')}
+              </div>
+            )}
             
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '15px' }}>
@@ -444,24 +540,40 @@ const PricingAnalysis: React.FC = () => {
               </div>
 
               <div style={{ marginBottom: '15px' }}>
-                <label>Categoría:</label>
+                <label>Categoría: <span style={{ color: 'red' }}>*</span></label>
                 <select
                   value={formData.category}
-                  onChange={(e) => setFormData({...formData, category: parseInt(e.target.value)})}
+                  onChange={(e) => {
+                    const newValue = parseInt(e.target.value);
+                    console.log('Form category changed to:', newValue);
+                    console.log('Available categories:', categories);
+                    setFormData({...formData, category: newValue});
+                  }}
                   required
                   style={{
                     width: '100%',
                     padding: '8px',
-                    border: '1px solid #ddd',
+                    border: formData.category === 0 ? '2px solid red' : '1px solid #ddd',
                     borderRadius: '4px',
-                    marginTop: '5px'
+                    marginTop: '5px',
+                    backgroundColor: formData.category === 0 ? '#fff5f5' : categories.length === 0 ? '#fff3cd' : 'white'
                   }}
                 >
-                  <option value={0}>Seleccione una categoría</option>
-                  {categories.map(cat => (
+                  <option value={0}>Seleccione una categoría *</option>
+                  {Array.isArray(categories) && categories.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
                 </select>
+                {formData.category === 0 && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '2px' }}>
+                    Este campo es requerido
+                  </div>
+                )}
+                {categories.length === 0 && (
+                  <div style={{ color: '#856404', fontSize: '12px', marginTop: '2px' }}>
+                    No hay categorías disponibles
+                  </div>
+                )}
               </div>
 
               <div style={{ marginBottom: '15px' }}>

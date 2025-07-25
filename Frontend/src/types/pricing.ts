@@ -12,8 +12,9 @@ export interface ServiceCategory {
 export interface ResourceType {
   id: number;
   name: string;
-  code: string;
+  name_display: string;
   description?: string;
+  overhead_percentage: string;
 }
 
 export interface Resource {
@@ -57,7 +58,9 @@ export interface UnitPriceItem {
   analysis: number;
   resource: number;
   resource_name?: string;
+  resource_code?: string;
   resource_unit?: string;
+  resource_type?: string;
   quantity: string;
   unit_cost: string;
   total_cost: string;
@@ -118,7 +121,7 @@ export interface ResourceForm {
   code: string;
   resource_type: number;
   unit: string;
-  unit_cost: string;
+  unit_cost: string | number;  // Permitir tanto string como number
   description?: string;
   is_active?: boolean;
 }
@@ -138,6 +141,7 @@ export interface UnitPriceAnalysisForm {
 export interface UnitPriceItemForm {
   resource: number;
   quantity: string;
+  unit_cost?: string;
   performance_factor?: string;
   notes?: string;
 }

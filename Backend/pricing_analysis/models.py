@@ -37,7 +37,7 @@ class ResourceType(models.Model):
     name = models.CharField(max_length=50, choices=RESOURCE_TYPES, unique=True)
     description = models.TextField(blank=True)
     overhead_percentage = models.DecimalField(
-        max_digits=5, decimal_places=2, default=0,
+        max_digits=5, decimal_places=2, default=Decimal('0.00'),
         help_text="Porcentaje de overhead aplicado a este tipo de recurso"
     )
     
@@ -87,23 +87,23 @@ class UnitPriceAnalysis(models.Model):
     
     # Rendimientos y factores
     performance_factor = models.DecimalField(
-        max_digits=8, decimal_places=4, default=1.0000,
+        max_digits=8, decimal_places=4, default=Decimal('1.0000'),
         verbose_name="Factor de Rendimiento",
         help_text="Factor que afecta la productividad (1.0 = rendimiento estándar)"
     )
     difficulty_factor = models.DecimalField(
-        max_digits=5, decimal_places=3, default=1.000,
+        max_digits=5, decimal_places=3, default=Decimal('1.000'),
         verbose_name="Factor de Dificultad",
         help_text="Factor por condiciones especiales o dificultad del trabajo"
     )
     
     # Márgenes
     profit_margin = models.DecimalField(
-        max_digits=5, decimal_places=2, default=15.00,
+        max_digits=5, decimal_places=2, default=Decimal('15.00'),
         verbose_name="Margen de Ganancia (%)"
     )
     administrative_percentage = models.DecimalField(
-        max_digits=5, decimal_places=2, default=5.00,
+        max_digits=5, decimal_places=2, default=Decimal('5.00'),
         verbose_name="Gastos Administrativos (%)"
     )
     
@@ -157,6 +157,8 @@ class UnitPriceAnalysis(models.Model):
     def get_cost_breakdown(self):
         """Retorna el desglose de costos por tipo de recurso"""
         breakdown = {}
+        
+        # Inicializar todos los tipos de recursos
         for resource_type in ResourceType.objects.all():
             type_name = resource_type.get_name_display()
             breakdown[type_name] = {
@@ -165,10 +167,15 @@ class UnitPriceAnalysis(models.Model):
             }
         
         total_cost = self.total_direct_cost
+        
+        # Procesar items y acumular costos por tipo
         if total_cost > 0:
             for item in self.items.all():
                 type_name = item.resource.resource_type.get_name_display()
-                breakdown[type_name]['cost'] += item.total_cost
+                item_cost = item.total_cost
+                
+                if type_name in breakdown:
+                    breakdown[type_name]['cost'] += item_cost
             
             # Calcular porcentajes
             for type_name in breakdown:
@@ -191,7 +198,7 @@ class UnitPriceItem(models.Model):
         help_text="Se llena automáticamente del recurso, pero puede ser modificado"
     )
     efficiency = models.DecimalField(
-        max_digits=5, decimal_places=3, default=1.000,
+        max_digits=5, decimal_places=3, default=Decimal('1.000'),
         verbose_name="Eficiencia",
         help_text="Factor de eficiencia específico para este recurso en este análisis"
     )
@@ -230,12 +237,12 @@ class ProjectEstimate(models.Model):
     
     # Factores generales del proyecto
     site_factor = models.DecimalField(
-        max_digits=5, decimal_places=3, default=1.000,
+        max_digits=5, decimal_places=3, default=Decimal('1.000'),
         verbose_name="Factor de Sitio",
         help_text="Factor por condiciones específicas del sitio"
     )
     season_factor = models.DecimalField(
-        max_digits=5, decimal_places=3, default=1.000,
+        max_digits=5, decimal_places=3, default=Decimal('1.000'),
         verbose_name="Factor Estacional",
         help_text="Factor por época del año"
     )

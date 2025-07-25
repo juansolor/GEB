@@ -27,22 +27,39 @@ const Resources: React.FC = () => {
   });
 
   useEffect(() => {
+    console.log('🔄 useEffect disparado - cargando datos...');
     loadData();
   }, [filter.resourceType]);
+
+  useEffect(() => {
+    console.log('📈 Estado de resourceTypes cambió:', resourceTypes.length, resourceTypes);
+  }, [resourceTypes]);
 
   const loadData = async () => {
     try {
       setLoading(true);
+      console.log('🔄 Iniciando carga de datos...');
+      
       const [resourcesData, typesData] = await Promise.all([
         getResources({ 
           resource_type: filter.resourceType ? parseInt(filter.resourceType) : undefined 
         }),
         getResourceTypes()
       ]);
-      setResources(resourcesData);
-      setResourceTypes(typesData);
+      
+      console.log('📊 Recursos cargados:', resourcesData);
+      console.log('🏷️ Tipos de recursos cargados:', typesData);
+      console.log('🔍 Tipo de typesData:', typeof typesData, Array.isArray(typesData));
+      
+      setResources(Array.isArray(resourcesData) ? resourcesData : []);
+      setResourceTypes(Array.isArray(typesData) ? typesData : []);
+      
+      console.log('✅ Estado actualizado - recursos:', Array.isArray(resourcesData) ? resourcesData.length : 0);
+      console.log('✅ Estado actualizado - tipos:', Array.isArray(typesData) ? typesData.length : 0);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.error('❌ Error loading data:', error);
+      setResources([]); // Ensure resources is always an array
+      setResourceTypes([]); // Ensure resourceTypes is always an array
       alert('Error al cargar los datos');
     } finally {
       setLoading(false);
@@ -51,17 +68,65 @@ const Resources: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validación frontend básica
+    if (formData.resource_type === 0) {
+      alert('Por favor selecciona un tipo de recurso válido');
+      return;
+    }
+    
+    // Si hay tipos de recursos cargados, verificar que el seleccionado existe
+    if (resourceTypes.length > 0) {
+      const selectedType = resourceTypes.find(type => type.id === formData.resource_type);
+      if (!selectedType) {
+        alert(`El tipo de recurso seleccionado (ID: ${formData.resource_type}) no es válido. Por favor selecciona uno de la lista.`);
+        return;
+      }
+    }
+    
+    if (!formData.name.trim()) {
+      alert('El nombre es requerido');
+      return;
+    }
+    
+    if (!formData.code.trim()) {
+      alert('El código es requerido');
+      return;
+    }
+    
+    if (!formData.unit.trim()) {
+      alert('La unidad es requerida');
+      return;
+    }
+    
+    if (!formData.unit_cost || parseFloat(formData.unit_cost.toString()) <= 0) {
+      alert('El costo unitario debe ser mayor que 0');
+      return;
+    }
+    
     try {
+      // Convertir unit_cost a número antes de enviar
+      const submitData = {
+        ...formData,
+        unit_cost: typeof formData.unit_cost === 'string' ? parseFloat(formData.unit_cost) || 0 : formData.unit_cost
+      };
+      
+      console.log('Datos del formulario antes de enviar:', formData);
+      console.log('Datos procesados para enviar:', submitData);
+      
       if (editingResource) {
-        const updated = await updateResource(editingResource.id, formData);
+        const updated = await updateResource(editingResource.id, submitData);
         setResources(resources.map(r => r.id === updated.id ? updated : r));
       } else {
-        const created = await createResource(formData);
+        const created = await createResource(submitData);
         setResources([...resources, created]);
       }
       resetForm();
     } catch (error) {
       console.error('Error saving resource:', error);
+      if (error instanceof Error && 'response' in error) {
+        console.error('Error response:', (error as any).response?.data);
+      }
       alert('Error al guardar el recurso');
     }
   };
@@ -84,7 +149,7 @@ const Resources: React.FC = () => {
     if (window.confirm('¿Está seguro de eliminar este recurso?')) {
       try {
         await deleteResource(id);
-        setResources(resources.filter(r => r.id !== id));
+        setResources(Array.isArray(resources) ? resources.filter(r => r.id !== id) : []);
       } catch (error) {
         console.error('Error deleting resource:', error);
         alert('Error al eliminar el recurso');
@@ -106,21 +171,21 @@ const Resources: React.FC = () => {
     setShowForm(false);
   };
 
-  const filteredResources = resources.filter(resource =>
+  const filteredResources = Array.isArray(resources) ? resources.filter(resource =>
     resource.name.toLowerCase().includes(filter.search.toLowerCase()) ||
     resource.code.toLowerCase().includes(filter.search.toLowerCase())
-  );
+  ) : [];
 
   const getResourceTypeIcon = (typeId: number) => {
     const type = resourceTypes.find(t => t.id === typeId);
     if (!type) return '📦';
-    switch (type.code) {
-      case 'MAT': return '🧱';
-      case 'MO': return '👷';
-      case 'EQ': return '🚛';
-      case 'SUB': return '🔧';
-      case 'TRA': return '🚚';
-      case 'OTR': return '📋';
+    switch (type.name) {
+      case 'material': return '🧱';
+      case 'labor': return '👷';
+      case 'equipment': return '🚛';
+      case 'subcontract': return '🔧';
+      case 'transport': return '🚚';
+      case 'overhead': return '📋';
       default: return '📦';
     }
   };
@@ -148,7 +213,13 @@ const Resources: React.FC = () => {
       }}>
         <h2>📦 Gestión de Recursos</h2>
         <button 
-          onClick={() => setShowForm(true)}
+          onClick={() => {
+            console.log('Intentando abrir formulario. Tipos de recursos disponibles:', resourceTypes);
+            if (resourceTypes.length === 0) {
+              alert('No se han cargado los tipos de recursos. El formulario se abrirá, pero necesitarás recargar la página si los tipos no aparecen.');
+            }
+            setShowForm(true);
+          }}
           style={{
             backgroundColor: '#007bff',
             color: 'white',
@@ -180,7 +251,7 @@ const Resources: React.FC = () => {
           >
             <option value="">Todos los tipos</option>
             {resourceTypes.map(type => (
-              <option key={type.id} value={type.id}>{type.name}</option>
+              <option key={type.id} value={type.id}>{type.name_display}</option>
             ))}
           </select>
         </div>
@@ -329,9 +400,35 @@ const Resources: React.FC = () => {
           }}>
             <h3>{editingResource ? 'Editar Recurso' : 'Nuevo Recurso'}</h3>
             
+            {resourceTypes.length === 0 && (
+              <div style={{
+                backgroundColor: '#fff3cd',
+                color: '#856404',
+                padding: '10px',
+                borderRadius: '4px',
+                marginBottom: '15px',
+                border: '1px solid #ffeaa7'
+              }}>
+                ⚠️ No se han cargado los tipos de recursos. Verifique la conexión con el servidor.
+              </div>
+            )}
+            
+            {resourceTypes.length > 0 && (
+              <div style={{
+                backgroundColor: '#d4edda',
+                color: '#155724',
+                padding: '8px',
+                borderRadius: '4px',
+                marginBottom: '15px',
+                fontSize: '12px'
+              }}>
+                ✅ {resourceTypes.length} tipos de recursos disponibles: {resourceTypes.map(type => type.name_display).join(', ')}
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit}>
               <div style={{ marginBottom: '15px' }}>
-                <label>Tipo de Recurso:</label>
+                <label>Tipo de Recurso: <span style={{ color: 'red' }}>*</span></label>
                 <select
                   value={formData.resource_type}
                   onChange={(e) => setFormData({...formData, resource_type: parseInt(e.target.value)})}
@@ -339,20 +436,26 @@ const Resources: React.FC = () => {
                   style={{
                     width: '100%',
                     padding: '8px',
-                    border: '1px solid #ddd',
+                    border: formData.resource_type === 0 ? '2px solid red' : '1px solid #ddd',
                     borderRadius: '4px',
-                    marginTop: '5px'
+                    marginTop: '5px',
+                    backgroundColor: formData.resource_type === 0 ? '#fff5f5' : 'white'
                   }}
                 >
-                  <option value={0}>Seleccione un tipo</option>
+                  <option value={0}>Seleccione un tipo de recurso *</option>
                   {resourceTypes.map(type => (
-                    <option key={type.id} value={type.id}>{type.name}</option>
+                    <option key={type.id} value={type.id}>{type.name_display}</option>
                   ))}
                 </select>
+                {formData.resource_type === 0 && (
+                  <div style={{ color: 'red', fontSize: '12px', marginTop: '2px' }}>
+                    Este campo es requerido
+                  </div>
+                )}
               </div>
 
               <div style={{ marginBottom: '15px' }}>
-                <label>Código:</label>
+                <label>Código: <span style={{ color: 'red' }}>*</span></label>
                 <input
                   type="text"
                   value={formData.code}
@@ -370,7 +473,7 @@ const Resources: React.FC = () => {
               </div>
 
               <div style={{ marginBottom: '15px' }}>
-                <label>Nombre:</label>
+                <label>Nombre: <span style={{ color: 'red' }}>*</span></label>
                 <input
                   type="text"
                   value={formData.name}
@@ -388,7 +491,7 @@ const Resources: React.FC = () => {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                 <div>
-                  <label>Unidad:</label>
+                  <label>Unidad: <span style={{ color: 'red' }}>*</span></label>
                   <input
                     type="text"
                     value={formData.unit}
@@ -406,10 +509,11 @@ const Resources: React.FC = () => {
                 </div>
 
                 <div>
-                  <label>Costo Unitario:</label>
+                  <label>Costo Unitario: <span style={{ color: 'red' }}>*</span></label>
                   <input
                     type="number"
                     step="0.01"
+                    min="0.01"
                     value={formData.unit_cost}
                     onChange={(e) => setFormData({...formData, unit_cost: e.target.value})}
                     required
