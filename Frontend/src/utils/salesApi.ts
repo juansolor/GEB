@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Sale, SaleItem, ApiResponse } from '../types';
+import { Sale, ApiResponse } from '../types';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api';
 

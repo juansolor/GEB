@@ -47,6 +47,7 @@ const Customers: React.FC = () => {
   // Filter customers when search term or filters change
   useEffect(() => {
     filterCustomers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customers, searchTerm, customerTypeFilter, statusFilter]);
 
   const loadCustomers = async () => {
@@ -110,10 +111,10 @@ const Customers: React.FC = () => {
     setShowDetails(false);
   };
 
-  const handleViewCustomer = (customer: Customer) => {
-    setSelectedCustomer(customer);
-    setShowDetails(true);
-  };
+  // const handleViewCustomer = (customer: Customer) => {
+  //   setSelectedCustomer(customer);
+  //   setShowDetails(true);
+  // };
 
   const handleDeleteCustomer = (customerId: number) => {
     setCustomerToDelete(customerId);
@@ -170,12 +171,12 @@ const Customers: React.FC = () => {
     setSelectedCustomer(null);
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP'
-    }).format(amount);
-  };
+  // const formatCurrency = (amount: number) => {
+  //   return new Intl.NumberFormat('es-CO', {
+  //     style: 'currency',
+  //     currency: 'COP'
+  //   }).format(amount);
+  // };
 
   if (loading) {
     return (

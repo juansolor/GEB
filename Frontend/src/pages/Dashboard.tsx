@@ -144,7 +144,7 @@ const Dashboard: React.FC = () => {
       {/* Quick Actions */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="card-title text-lg mb-4">Acciones Rápidas</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <button 
             onClick={() => navigate('/sales')}
             className="btn-primary"
@@ -162,6 +162,43 @@ const Dashboard: React.FC = () => {
             className="btn-secondary"
           >
             📦 Nuevo Producto
+          </button>
+          <button 
+            onClick={() => navigate('/inventory')}
+            className="btn-secondary"
+          >
+            📋 Gestionar Inventario
+          </button>
+        </div>
+      </div>
+
+      {/* New BI & Analytics Section */}
+      <div className="card">
+        <h3 className="card-title text-lg mb-4">Business Intelligence & Analytics</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <button 
+            onClick={() => navigate('/business-intelligence')}
+            className="flex flex-col items-center p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all"
+          >
+            <span className="text-2xl mb-2">📊</span>
+            <span className="font-semibold">BI Dashboard</span>
+            <span className="text-xs opacity-90">KPIs e Insights</span>
+          </button>
+          <button 
+            onClick={() => navigate('/dynamic-pricing')}
+            className="flex flex-col items-center p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all"
+          >
+            <span className="text-2xl mb-2">⚡</span>
+            <span className="font-semibold">Pricing Dinámico</span>
+            <span className="text-xs opacity-90">Matriz de Costos</span>
+          </button>
+          <button 
+            onClick={() => navigate('/depreciations')}
+            className="flex flex-col items-center p-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all"
+          >
+            <span className="text-2xl mb-2">📉</span>
+            <span className="font-semibold">Depreciaciones</span>
+            <span className="text-xs opacity-90">Activos Fijos</span>
           </button>
         </div>
       </div>

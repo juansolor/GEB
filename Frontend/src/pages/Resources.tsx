@@ -29,6 +29,7 @@ const Resources: React.FC = () => {
   useEffect(() => {
     console.log('🔄 useEffect disparado - cargando datos...');
     loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter.resourceType]);
 
   useEffect(() => {

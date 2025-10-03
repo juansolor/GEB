@@ -36,6 +36,7 @@ const Products: React.FC = () => {
   // Load products when filters change
   useEffect(() => {
     loadProducts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm, selectedCategory, selectedType, showActiveOnly]);
 
   const loadData = async () => {

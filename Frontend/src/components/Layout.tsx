@@ -20,11 +20,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: '📊' },
     { name: 'Productos', path: '/products', icon: '📦' },
+    { name: 'Inventario', path: '/inventory', icon: '📋' },
     { name: 'Clientes', path: '/customers', icon: '👥' },
     { name: 'Ventas', path: '/sales', icon: '💰' },
     { name: 'Finanzas', path: '/finances', icon: '💳' },
+    { name: 'Depreciaciones', path: '/depreciations', icon: '📉' },
     { name: 'Recursos', path: '/resources', icon: '🧱' },
     { name: 'Análisis de Precios', path: '/pricing-analysis', icon: '📋' },
+    { name: 'BI Dashboard', path: '/business-intelligence', icon: '📊' },
+    { name: 'Pricing Dinámico', path: '/dynamic-pricing', icon: '⚡' },
+    { name: 'Marketing Analytics', path: '/marketing-analytics', icon: '🎯' },
     { name: 'Reportes', path: '/reports', icon: '📈' },
     ...(user?.role === 'admin' ? [{ name: 'Usuarios', path: '/users', icon: '⚙️' }] : []),
   ];
@@ -32,15 +37,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-64' : 'w-16'} bg-white shadow-lg transition-all duration-300`}>
-        <div className="p-4">
+      <div className={`${sidebarOpen ? 'w-64' : 'w-16'} sidebar-container transition-all duration-300`}>
+        <div className="sidebar-header">
           <div className="flex items-center justify-between">
-            <h1 className={`font-bold text-xl text-primary-600 ${!sidebarOpen && 'hidden'}`}>
+            <h1 className={`sidebar-brand ${!sidebarOpen && 'hidden'}`}>
               GEB
             </h1>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+              className="sidebar-toggle"
             >
               {sidebarOpen ? '←' : '→'}
             </button>
@@ -66,9 +71,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="bg-white shadow-sm border-b">
+        <header className="main-header">
           <div className="px-6 py-4 flex justify-between items-center">
-            <h2 className="header-title text-2xl">
+            <h2 className="header-title">
               {menuItems.find(item => item.path === location.pathname)?.name || 'Dashboard'}
             </h2>
             
@@ -78,7 +83,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </span>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-black px-4 py-2 rounded-lg transition-colors"
+                className="logout-btn px-4 py-2 rounded-lg"
               >
                 Cerrar Sesión
               </button>

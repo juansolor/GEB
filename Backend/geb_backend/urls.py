@@ -35,6 +35,7 @@ router.register(r'project-estimate-items', ProjectEstimateItemViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/reports/', include('reports.urls')),
+    path('api/marketing-analytics/', include('marketing_analytics.urls')),
     path('api/', include(router.urls)),
     path('api/auth/', include('rest_framework.urls')),
     path('test/', include('testing_pages.urls')),

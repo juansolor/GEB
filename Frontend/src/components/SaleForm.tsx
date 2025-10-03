@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Product, Customer, SaleItem } from '../types';
+import { Product, Customer } from '../types';
 import { SaleCreateData } from '../utils/salesApi';
 import { productApi, customerApi } from '../utils/api';
 

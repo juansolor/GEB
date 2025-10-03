@@ -94,6 +94,7 @@ const PricingAnalysisDetail: React.FC = () => {
         }
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
   
   // Efecto adicional para verificar que los ítems corresponden al análisis actual

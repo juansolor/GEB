@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'reports',
     'testing_pages',
     'pricing_analysis',
+    'marketing_analytics',
 ]
 
 MIDDLEWARE = [

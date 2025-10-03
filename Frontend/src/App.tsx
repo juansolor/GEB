@@ -6,14 +6,19 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
+import Inventory from './pages/Inventory';
 import Customers from './pages/Customers';
 import Sales from './pages/Sales';
 import Finances from './pages/Finances';
+import Depreciations from './pages/Depreciations';
 import Reports from './pages/Reports';
 import Users from './pages/Users';
 import PricingAnalysis from './pages/PricingAnalysis';
 import PricingAnalysisDetail from './pages/PricingAnalysisDetail';
 import Resources from './pages/Resources';
+import MarketingAnalytics from './pages/MarketingAnalytics';
+import BusinessIntelligenceDashboard from './components/BusinessIntelligenceDashboard';
+import DynamicPricingMatrix from './components/DynamicPricingMatrix';
 import Layout from './components/Layout';
 import './App.css';
 
@@ -47,6 +52,16 @@ function App() {
               }
             />
             <Route
+              path="/inventory"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Inventory />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/customers"
               element={
                 <ProtectedRoute>
@@ -72,6 +87,36 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <Finances />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/depreciations"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <Depreciations />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/business-intelligence"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <BusinessIntelligenceDashboard />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dynamic-pricing"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <DynamicPricingMatrix />
                   </Layout>
                 </ProtectedRoute>
               }
@@ -112,6 +157,16 @@ function App() {
                 <ProtectedRoute>
                   <Layout>
                     <PricingAnalysisDetail />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/marketing-analytics"
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <MarketingAnalytics />
                   </Layout>
                 </ProtectedRoute>
               }

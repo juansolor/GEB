@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Product, Category, Customer } from '../types';
+import { Category, Customer } from '../types';
 
 // Configure base URL for API calls
 const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
