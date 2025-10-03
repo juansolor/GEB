@@ -1,0 +1,74 @@
+{
+  "name": "GEB - Sistema de Gestión Empresarial",
+  "short_name": "GEB",
+  "description": "Sistema integral de gestión empresarial con CRM, ERP, Analytics y más",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["business", "productivity", "finance"],
+  "lang": "es",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo512.png",
+      "type": "image/png", 
+      "sizes": "512x512"
+    },
+    {
+      "src": "/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard", 
+      "description": "Ver panel principal con KPIs",
+      "url": "/dashboard",
+      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Marketing Analytics",
+      "short_name": "Marketing",
+      "description": "Análisis de Google Ads e Instagram",
+      "url": "/marketing-analytics", 
+      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Pricing Dinámico",
+      "short_name": "Pricing",
+      "description": "Matriz de costos inteligente",
+      "url": "/dynamic-pricing",
+      "icons": [{ "src": "/logo192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720", 
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "750x1334",
+      "type": "image/png", 
+      "form_factor": "narrow"
+    }
+  ]
+}

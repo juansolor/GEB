@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -20,13 +20,26 @@ import MarketingAnalytics from './pages/MarketingAnalytics';
 import BusinessIntelligenceDashboard from './components/BusinessIntelligenceDashboard';
 import DynamicPricingMatrix from './components/DynamicPricingMatrix';
 import Layout from './components/Layout';
+import PWAInstallButton, { OfflineIndicator } from './components/PWAInstallButton';
+import { pwaManager } from './utils/pwa';
 import './App.css';
 
 function App() {
+  // Initialize PWA on app load
+  useEffect(() => {
+    console.log('🚀 GEB PWA initialized');
+  }, []);
+
   return (
     <AuthProvider>
       <Router>
         <div className="App">
+          {/* PWA Install Banner */}
+          <PWAInstallButton variant="banner" />
+          
+          {/* Offline Indicator */}
+          <OfflineIndicator />
+          
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

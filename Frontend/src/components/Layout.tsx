@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import PWAInstallButton from './PWAInstallButton';
+import { usePWA } from '../utils/pwa';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -78,6 +80,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </h2>
             
             <div className="flex items-center space-x-4">
+              {/* PWA Install Button */}
+              <PWAInstallButton className="hidden lg:flex" />
+              
               <span className="user-info text-sm">
                 Bienvenido, {user?.first_name} {user?.last_name}
               </span>
