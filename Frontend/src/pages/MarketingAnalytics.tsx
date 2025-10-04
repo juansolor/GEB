@@ -492,7 +492,7 @@ const MarketingAnalytics: React.FC = () => {
               
               <button
                 onClick={exportToExcel}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center gap-2"
+                className="btn-high-contrast-green px-4 py-2 rounded-lg transition-colors duration-200 flex items-center gap-2"
               >
                 📊 Exportar Excel
               </button>
@@ -525,9 +525,9 @@ const MarketingAnalytics: React.FC = () => {
                   }}
                   className={`${
                     activeTab === tab.key
-                      ? 'border-indigo-500 text-indigo-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  } whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-colors duration-200`}
+                      ? 'tab-button-active-high-contrast'
+                      : 'tab-button-inactive-high-contrast'
+                  } whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm transition-all duration-200`}
                 >
                   {tab.label}
                 </button>
@@ -659,47 +659,47 @@ const MarketingAnalytics: React.FC = () => {
             {/* Platform Performance and Platform Distribution */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Platform Performance Table */}
-              <div className="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+              <div className="lg:col-span-2">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Rendimiento por Plataforma</h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                <div className="table-container-high-contrast">
+                  <table className="table-high-contrast">
+                    <thead>
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           Plataforma
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           Gasto
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           Ingresos
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th>
                           ROAS
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody>
                       {dashboardData.platform_performance.map((platform, index) => (
-                        <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 whitespace-nowrap">
+                        <tr key={index}>
+                          <td>
                             <div className="flex items-center">
                               <span className="mr-2">{getPlatformIcon(platform.platform)}</span>
-                              <span className="text-sm font-medium text-gray-900">{platform.name}</span>
+                              <span className="font-medium">{platform.name}</span>
                             </div>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td>
                             ${platform.spend.toLocaleString()}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td>
                             ${platform.revenue.toLocaleString()}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                              platform.roas >= 200 ? 'bg-green-100 text-green-800' :
-                              platform.roas >= 100 ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
+                          <td>
+                            <span className={`table-action-high-contrast ${
+                              platform.roas >= 200 ? 'bg-green-600' :
+                              platform.roas >= 100 ? 'bg-yellow-600' :
+                              'danger'
+                            } px-3 py-1 text-xs rounded-full`}>
                               {platform.roas}%
                             </span>
                           </td>
@@ -711,7 +711,7 @@ const MarketingAnalytics: React.FC = () => {
               </div>
 
               {/* Platform Distribution */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="card-high-contrast">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribución de Gasto</h3>
                 <div className="h-64">
                   <Doughnut
@@ -770,7 +770,7 @@ const MarketingAnalytics: React.FC = () => {
               <h2 className="text-2xl font-bold text-gray-900">Plataformas de Marketing</h2>
               <button
                 onClick={() => setShowPlatformConfig(true)}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
+                className="btn-high-contrast-blue px-4 py-2 rounded-lg transition-colors duration-200"
               >
                 ➕ Agregar Plataforma
               </button>
@@ -813,11 +813,15 @@ const MarketingAnalytics: React.FC = () => {
                     <button
                       onClick={() => syncPlatformData(platform.id)}
                       disabled={loading}
-                      className="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-50"
+                      className={`flex-1 px-3 py-2 text-sm rounded-lg transition-colors duration-200 ${
+                        loading 
+                          ? 'btn-disabled-high-contrast' 
+                          : 'btn-high-contrast-blue'
+                      }`}
                     >
                       🔄 Sincronizar
                     </button>
-                    <button className="flex-1 px-3 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                    <button className="btn-high-contrast-gray flex-1 px-3 py-2 text-sm rounded-lg transition-colors duration-200">
                       ⚙️ Configurar
                     </button>
                   </div>
@@ -997,14 +1001,14 @@ const MarketingAnalytics: React.FC = () => {
                     <div className="ml-4 flex gap-2">
                       <button
                         onClick={() => setShowInsightDetails(insight)}
-                        className="px-3 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors duration-200"
+                        className="btn-outline-high-contrast px-3 py-2 rounded-lg transition-colors duration-200 text-sm"
                       >
                         Ver Detalles
                       </button>
                       {!insight.acknowledged && (
                         <button
                           onClick={() => acknowledgeInsight(insight.id)}
-                          className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                          className="btn-high-contrast-green px-3 py-2 rounded-lg transition-colors duration-200 text-sm"
                         >
                           ✓ Marcar como Visto
                         </button>
@@ -1083,11 +1087,11 @@ const MarketingAnalytics: React.FC = () => {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowPlatformConfig(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                  className="btn-outline-high-contrast flex-1 px-4 py-2 rounded-lg transition-colors duration-200"
                 >
                   Cancelar
                 </button>
-                <button className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200">
+                <button className="btn-high-contrast-blue flex-1 px-4 py-2 rounded-lg transition-colors duration-200">
                   Configurar
                 </button>
               </div>
@@ -1113,7 +1117,7 @@ const MarketingAnalytics: React.FC = () => {
                 </div>
                 <button
                   onClick={() => setShowInsightDetails(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-full p-1 transition-all duration-200"
                 >
                   ✕
                 </button>
@@ -1146,7 +1150,7 @@ const MarketingAnalytics: React.FC = () => {
                         acknowledgeInsight(showInsightDetails.id);
                         setShowInsightDetails(null);
                       }}
-                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                      className="btn-high-contrast-green px-4 py-2 rounded-lg transition-colors duration-200"
                     >
                       ✓ Marcar como Visto
                     </button>

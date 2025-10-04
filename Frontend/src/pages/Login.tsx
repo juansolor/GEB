@@ -48,13 +48,13 @@ const Login: React.FC = () => {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="error-message">
+              <div className="error-message-high-contrast">
                 {error}
               </div>
             )}
 
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+            <div className="form-group-high-contrast">
+              <label htmlFor="username" className="label-high-contrast label-required">
                 Usuario
               </label>
               <div className="mt-1">
@@ -65,14 +65,14 @@ const Login: React.FC = () => {
                   required
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="input-field"
+                  className="input-high-contrast w-full"
                   placeholder="Ingresa tu usuario"
                 />
               </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <div className="form-group-high-contrast">
+              <label htmlFor="password" className="label-high-contrast label-required">
                 Contraseña
               </label>
               <div className="mt-1">
@@ -83,7 +83,7 @@ const Login: React.FC = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="input-field"
+                  className="input-high-contrast w-full"
                   placeholder="Ingresa tu contraseña"
                 />
               </div>
@@ -93,7 +93,9 @@ const Login: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="btn-primary w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className={`w-full flex justify-center py-3 px-4 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isLoading ? 'btn-disabled-high-contrast' : 'btn-high-contrast-blue'
+                }`}
               >
                 {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
               </button>

@@ -9,9 +9,8 @@ const CRITICAL_ASSETS = [
   '/manifest.json',
   '/static/css/main.css',
   '/static/js/main.js',
-  '/favicon.ico',
-  '/logo192.png',
-  '/logo512.png'
+  '/favicon.svg',
+  '/logo.svg'
 ];
 
 // Rutas de la aplicación para cachear

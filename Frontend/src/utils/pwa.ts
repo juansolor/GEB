@@ -24,7 +24,30 @@ class PWAManager {
   private onlineStatusCallbacks: ((isOnline: boolean) => void)[] = [];
 
   constructor() {
-    this.initializeServiceWorker();
+    // Evitar registrar el Service Worker en desarrollo para prevenir
+    // recargas constantes de hot updates y duplicación de eventos.
+  const nodeEnv = (import.meta as any).env?.MODE || (import.meta as any).env?.NODE_ENV;
+  if (nodeEnv === 'production') {
+      this.initializeServiceWorker();
+    } else {
+      console.log('🧪 Modo desarrollo: Service Worker deshabilitado para evitar recargas');
+      // Forzar desregistro de cualquier SW previo que siga controlando y limpiar caches
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+          regs.forEach(reg => {
+            const scope = reg.scope;
+            reg.unregister().then(r => {
+              console.log('🧪 SW desregistrado en desarrollo:', scope, 'resultado:', r);
+            });
+          });
+        });
+        if (typeof caches !== 'undefined') {
+          caches.keys().then(keys => keys.forEach(k => {
+            caches.delete(k).then(() => console.log('🧪 Cache eliminado (dev):', k));
+          }));
+        }
+      }
+    }
     this.initializeInstallPrompt();
     this.initializeOnlineStatus();
   }

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import PWAInstallButton from './PWAInstallButton';
-import { usePWA } from '../utils/pwa';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -39,32 +38,34 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-64' : 'w-16'} sidebar-container transition-all duration-300`}>
-        <div className="sidebar-header">
+      <div className={`${sidebarOpen ? 'w-64' : 'w-16'} sidebar-high-contrast ${!sidebarOpen ? 'collapsed' : ''} transition-all duration-300`}>
+        <div className="sidebar-header-high-contrast">
           <div className="flex items-center justify-between">
-            <h1 className={`sidebar-brand ${!sidebarOpen && 'hidden'}`}>
+            <h1 className={`sidebar-brand-high-contrast ${!sidebarOpen && 'hidden'}`}>
               GEB
             </h1>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="sidebar-toggle"
+              className="sidebar-toggle-high-contrast"
+              aria-label={sidebarOpen ? 'Colapsar sidebar' : 'Expandir sidebar'}
             >
               {sidebarOpen ? '←' : '→'}
             </button>
           </div>
         </div>
 
-        <nav className="mt-8">
+        <nav className="mt-4">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`sidebar-link flex items-center px-4 py-3 transition-colors ${
+              className={`sidebar-link-high-contrast ${
                 location.pathname === item.path ? 'active' : ''
               }`}
+              aria-label={`Navegar a ${item.name}`}
             >
-              <span className="text-xl">{item.icon}</span>
-              {sidebarOpen && <span className="ml-3 font-medium">{item.name}</span>}
+              <span className="sidebar-icon-high-contrast">{item.icon}</span>
+              {sidebarOpen && <span className="sidebar-text-high-contrast">{item.name}</span>}
             </Link>
           ))}
         </nav>
@@ -73,9 +74,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="main-header">
-          <div className="px-6 py-4 flex justify-between items-center">
-            <h2 className="header-title">
+        <header className="header-high-contrast">
+          <div className="flex justify-between items-center">
+            <h2 className="header-title-high-contrast">
               {menuItems.find(item => item.path === location.pathname)?.name || 'Dashboard'}
             </h2>
             
@@ -83,12 +84,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               {/* PWA Install Button */}
               <PWAInstallButton className="hidden lg:flex" />
               
-              <span className="user-info text-sm">
+              <span className="user-info-high-contrast">
                 Bienvenido, {user?.first_name} {user?.last_name}
               </span>
               <button
                 onClick={handleLogout}
-                className="logout-btn px-4 py-2 rounded-lg"
+                className="logout-btn-high-contrast"
+                aria-label="Cerrar sesión"
               >
                 Cerrar Sesión
               </button>

@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { Category, Customer } from '../types';
 
-// Configure base URL for API calls
-const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+// Configure base URL for API calls (Vite usa import.meta.env)
+// Renombrar variable en .env a VITE_API_URL si existe REACT_APP_API_URL mantener fallback
+const baseURL = (import.meta as any).env?.VITE_API_URL || (import.meta as any).env?.REACT_APP_API_URL || 'http://localhost:8000';
 
 // Create axios instance
 const api = axios.create({
@@ -34,9 +35,10 @@ api.interceptors.response.use(
       // Network error - backend is probably not running
       error.userMessage = 'No se puede conectar al servidor. Verifica que el backend esté ejecutándose en http://localhost:8000';
     } else if (error.response?.status === 401) {
-      // Token expired or invalid
+      // Token expired or invalid - solo limpiar token, no hacer redirect
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      // No hacer window.location.href aquí para evitar bucles
+      error.userMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
     } else if (error.response?.status >= 500) {
       // Server error
       error.userMessage = 'Error del servidor. Intenta nuevamente más tarde.';

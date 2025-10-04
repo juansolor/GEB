@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import api from '../utils/api';
 import { User } from '../types';
 
@@ -28,26 +28,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   const [isLoading, setIsLoading] = useState(true);
+  const fetchTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const response = await api.get('/api/users/profile/');
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-        logout();
-      } finally {
+    // Limpiar debounce previo
+    if (fetchTimeoutRef.current) {
+      window.clearTimeout(fetchTimeoutRef.current);
+    }
+
+    const scheduleFetch = () => {
+      if (!token) {
         setIsLoading(false);
+        return;
       }
+      fetchTimeoutRef.current = window.setTimeout(async () => {
+        try {
+          const response = await api.get('/api/users/profile/');
+          setUser(response.data);
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+          setUser(null);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 150); // pequeño debounce para evitar ráfagas
     };
 
-    if (token) {
-      fetchUserProfile();
-    } else {
-      setIsLoading(false);
-    }
-  }, [token]); // fetchUserProfile is now defined inside useEffect
+    setIsLoading(true);
+    scheduleFetch();
+
+    return () => {
+      if (fetchTimeoutRef.current) {
+        window.clearTimeout(fetchTimeoutRef.current);
+      }
+    };
+  }, [token]);
 
   const login = async (username: string, password: string) => {
     try {
@@ -72,6 +87,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
+  };
+
+  // Método específico para limpiar sesión expirada sin bucles
+  const clearExpiredSession = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+    // No llamamos setToken aquí para evitar bucles del useEffect
   };
 
   const value = {

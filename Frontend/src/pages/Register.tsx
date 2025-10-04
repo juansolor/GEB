@@ -129,7 +129,7 @@ const Register: React.FC = () => {
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {errors.length > 0 && (
-              <div className="error-message">
+              <div className="error-message-high-contrast">
                 <ul className="list-disc list-inside">
                   {errors.map((error, index) => (
                     <li key={index}>{error}</li>
@@ -139,8 +139,8 @@ const Register: React.FC = () => {
             )}
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">
+              <div className="form-group-high-contrast">
+                <label htmlFor="first_name" className="label-high-contrast">
                   Nombre
                 </label>
                 <div className="mt-1">
@@ -151,14 +151,14 @@ const Register: React.FC = () => {
                     required
                     value={formData.first_name}
                     onChange={handleChange}
-                    className="input-field"
+                    className="input-high-contrast"
                     placeholder="Tu nombre"
                   />
                 </div>
               </div>
 
-              <div>
-                <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">
+              <div className="form-group-high-contrast">
+                <label htmlFor="last_name" className="label-high-contrast">
                   Apellido
                 </label>
                 <div className="mt-1">
@@ -169,15 +169,15 @@ const Register: React.FC = () => {
                     required
                     value={formData.last_name}
                     onChange={handleChange}
-                    className="input-field"
+                    className="input-high-contrast"
                     placeholder="Tu apellido"
                   />
                 </div>
               </div>
             </div>
 
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+            <div className="form-group-high-contrast">
+              <label htmlFor="username" className="label-high-contrast">
                 Nombre de Usuario
               </label>
               <div className="mt-1">
@@ -188,14 +188,14 @@ const Register: React.FC = () => {
                   required
                   value={formData.username}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-high-contrast"
                   placeholder="Nombre de usuario único"
                 />
               </div>
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <div className="form-group-high-contrast">
+              <label htmlFor="email" className="label-high-contrast">
                 Email
               </label>
               <div className="mt-1">
@@ -206,14 +206,14 @@ const Register: React.FC = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-high-contrast"
                   placeholder="tu@email.com"
                 />
               </div>
             </div>
 
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            <div className="form-group-high-contrast">
+              <label htmlFor="phone" className="label-high-contrast">
                 Teléfono
               </label>
               <div className="mt-1">
@@ -223,14 +223,14 @@ const Register: React.FC = () => {
                   type="tel"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-high-contrast"
                   placeholder="Número de teléfono"
                 />
               </div>
             </div>
 
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+            <div className="form-group-high-contrast">
+              <label htmlFor="role" className="label-high-contrast">
                 Rol
               </label>
               <div className="mt-1">
@@ -239,7 +239,7 @@ const Register: React.FC = () => {
                   name="role"
                   value={formData.role}
                   onChange={handleChange}
-                  className="input-field"
+                  className="select-high-contrast"
                 >
                   <option value="employee">Empleado</option>
                   <option value="manager">Gerente</option>
@@ -248,8 +248,8 @@ const Register: React.FC = () => {
               </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <div className="form-group-high-contrast">
+              <label htmlFor="password" className="label-high-contrast">
                 Contraseña
               </label>
               <div className="mt-1">
@@ -260,14 +260,14 @@ const Register: React.FC = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-high-contrast"
                   placeholder="Mínimo 6 caracteres"
                 />
               </div>
             </div>
 
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+            <div className="form-group-high-contrast">
+              <label htmlFor="confirmPassword" className="label-high-contrast">
                 Confirmar Contraseña
               </label>
               <div className="mt-1">
@@ -278,7 +278,7 @@ const Register: React.FC = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-high-contrast"
                   placeholder="Repite tu contraseña"
                 />
               </div>
@@ -288,7 +288,9 @@ const Register: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="btn-primary w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className={`${
+                  isLoading ? 'btn-high-contrast-gray' : 'btn-high-contrast-primary'
+                } w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm disabled:opacity-50 disabled:cursor-not-allowed`}
               >
                 {isLoading ? 'Registrando...' : 'Crear Cuenta'}
               </button>
