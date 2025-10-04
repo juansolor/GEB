@@ -1,42 +1,100 @@
-# 🏢 GEB - Sistema de Gestión Empresarial Integral# 🏢 GEB - Sistema de Gestión Empresarial Integral
+# 🏢 GEB - Sistema de Gestión Empresarial Integral
 
+Plataforma modular (ERP + CRM + Pricing + BI + Marketing Analytics) con backend **Django REST** y frontend **React + Vite + TypeScript**. Incluye PWA, arquitectura escalable y sistema de accesibilidad de alto contraste.
 
+## 📌 Estado Actual
+- Migrado a Vite (React 18)
+- PWA (Service Worker en producción + offline fallback)
+- Accesibilidad reforzada (contraste dinámico `.text-white` safeguard)
+- CORS habilitado para puertos 3000/3001
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+## 🚀 Inicio Rápido
+### Backend
+```bash
+git clone https://github.com/juansolor/GEB.git
+cd GEB/Backend
+python -m venv venv
+venv\\Scripts\\activate   # Windows
+# source venv/bin/activate  # Linux/Mac
+pip install -r requirements.txt
+cp .env.example .env 2>NUL || copy .env.example .env
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+API: http://localhost:8000
 
-![Django](https://img.shields.io/badge/Django-5.2.4-green.svg)![Django](https://img.shields.io/badge/Django-5.2.4-green.svg)
+### Frontend
+```bash
+cd ../Frontend
+npm install
+cp .env.example .env 2>NUL || copy .env.example .env
+npm run dev
+```
+App: http://localhost:3000 (o 3001 si 3000 está ocupado)
 
-![React](https://img.shields.io/badge/React-19.0.0-blue.svg)![React](https://img.shields.io/badge/React-19.0.0-blue.svg)
+## 🧩 Módulos
+| Módulo | Descripción |
+|--------|-------------|
+| Productos / Inventario | Catálogo, stock y alertas |
+| Clientes (CRM) | Gestión de clientes y ventas |
+| Ventas | Registro y tokens de transacciones |
+| Finanzas | Transacciones, presupuestos, análisis |
+| Pricing Analysis | Matrices dinámicas de costos |
+| Marketing Analytics | Integración campañas externas |
+| BI Dashboard | KPIs y visualizaciones |
 
-![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)
+## 🔐 Autenticación
+`POST /api/users/login/` devuelve Token. Usar:
+```
+Authorization: Token <token>
+```
 
-![Python](https://img.shields.io/badge/Python-3.11+-green.svg)![Python](https://img.shields.io/badge/Python-3.11+-green.svg)
+## 🌐 CORS
+Config editable en `Backend/geb_backend/settings.py` (sección CORS). Agregar dominios productivos antes de desplegar.
 
+## 📂 Estructura Resumida
+```
+GEB/
+  Backend/
+    geb_backend/  users/ products/ sales/ ...
+  Frontend/
+    src/ (components, pages, contexts, utils)
+    public/ (sw.js, manifest.json)
+```
 
+## 🛠 Tecnologías Clave
+Backend: Django 5, DRF, Token Auth, CORS Headers
+Frontend: React 18, Vite, TypeScript, TailwindCSS, React Router, Axios
+PWA: Service Worker manual + install prompt + offline fallback
 
-## 📋 Descripción## 📋 Descripción
+## ♿ Accesibilidad
+- Contraste AAA donde aplica
+- Botones alto contraste (`btn-high-contrast-*`)
+- Salvaguarda automática texto blanco sobre fondo claro
 
+## � Scripts Útiles
+| Contexto | Comando | Descripción |
+|----------|---------|-------------|
+| Backend | `pytest -q` | Tests backend |
+| Frontend | `npm run lint` | Linter + TS |
+| Frontend | `npm run build` | Build producción |
+| Frontend | `npm run preview` | Previsualizar build |
 
+## 📘 Documentación Extendida
+Ver `README.backend.md` y `README.frontend.md` para más detalle.
 
-GEB es un sistema integral de gestión empresarial que incluye módulos de CRM, ERP, análisis de precios, business intelligence, **marketing analytics** y gestión financiera. Diseñado para empresas de construcción y servicios, pero adaptable a cualquier sector empresarial.GEB es un sistema integral de gestión empresarial que incluye módulos de CRM, ERP, análisis de precios, business intelligence, **marketing analytics** y gestión financiera. Diseñado para empresas de construcción y servicios, pero adaptable a cualquier sector empresarial.
+## 🗺 Roadmap Corto
+- [ ] JWT + refresh tokens
+- [ ] OpenAPI + Swagger (drf-spectacular)
+- [ ] Exportaciones avanzadas BI
+- [ ] Storybook + pruebas visuales
 
+## 🤝 Contribución
+Pull Requests bienvenidos. Estándar de commits: conventional commits (`feat:`, `fix:`, `chore:` ...).
 
-
-## ✨ Características Principales## � **CARACTERÍSTICAS PRINCIPALES**
-
-
-
-### 🎯 **Módulos del Sistema**### 🎯 **Core Features**
-
-- ✅ **Dynamic Pricing Matrix** - Matriz de costos inteligente y automática  
-
-#### **📊 Core Business**- ✅ **Business Intelligence** - Dashboards interactivos con KPIs en tiempo real
-
-- **Dashboard Principal**: KPIs en tiempo real, gráficos interactivos y métricas clave- ✅ **Machine Learning** - Modelos predictivos y análisis de tendencias
-
-- **Gestión de Productos**: Catálogo completo con categorías y control de stock- ✅ **Smart Insights** - Recomendaciones automáticas basadas en IA
-
-- **Inventario Avanzado**: Control de stock, movimientos automáticos y alertas- ✅ **Advanced Analytics** - Análisis profundo de rentabilidad y competencia
+## 📄 Licencia
+MIT (o definir). Añadir `LICENSE` si corresponde.
 
 - **Clientes (CRM)**: Gestión completa de clientes y seguimiento de ventas- ✅ **Real-time Monitoring** - Monitoreo continuo de métricas críticas
 
